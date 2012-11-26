@@ -21,6 +21,9 @@
 % See the License for the specific language governing permissions and
 % limitations under the License.
 %
+% Additional modifications released with no additional restrictions by
+% Thomas J. Moore.
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% requires build
@@ -34,13 +37,7 @@
 \else
 \def\putlogo#1{\HCode{<img src="#1" alt="Indiana University" width=400 />}}
 \fi
-\author{Thomas J. Moore\\
-% This is external material, not covered by the usual makefile
-% http://visualidentity.iu.edu/downloads/media/marks/iu_h_rgb.jpg
-% since it may disappear on the web, it's attached to the PDF:
-\embedfile{iu_h_rgb.jpg}%
-\putlogo{iu_h_rgb.jpg}\\
-UITS --- Research Technology --- Research Storage}
+\author{Thomas J. Moore}
 \date{Revision \RCSRevision}
 
 \maketitle
@@ -54,14 +51,19 @@ which returns random data on reads and verifies that data on writes.
 
 \vspace{0.75in}
 
-© 2008 Trustees of Indiana University.  This document is licensed under the
-Apache License, Version 2.0 (the ``License''); you may not use this document
-except in compliance with the License. You may obtain a copy of the License
-at \url{http://www.apache.org/licenses/LICENSE-2.0}.  Unless required by
+\copyright{} 2008 Trustees of Indiana University.  This document is
+licensed under the Apache License, Version 2.0 (the ``License''); you
+may not use this document except in compliance with the License. You
+may obtain a copy of the License at
+\url{http://www.apache.org/licenses/LICENSE-2.0}.  Unless required by
 applicable law or agreed to in writing, software distributed under the
 License is distributed on an ``AS IS'' BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License. 
+CONDITIONS OF ANY KIND, either express or implied. See the License for
+the specific language governing permissions and limitations under the
+License.
+
+Small improvements have been made since by the author, on his own
+time.  These changes are available under the same conditions.
 
 \vspace{0.25in}
 
@@ -389,21 +391,12 @@ if(!(libc_dll = dlopen("/usr/lib/libc.so", RTLD_LAZY))) {
 Finally, in order to use this, the library must be built appropriately.
 Like with the executables, it is assumed that the primary object code
 resides in an object file with the same name as the target library.  No
-support is provided for making versioned libraries.  Note that since
-everything is declared static, everything pretty much has to be in the same
-file.  This also means that the [[cproto.h]] is not very useful, so the
-static prototypes will be added to the top of the C file as well.
+support is provided for making versioned libraries.
 
 \lstset{language=make}
 <<makefile.vars>>=
 EXTRA_CFLAGS += -fPIC -Wall -Wshadow -Wwrite-strings -g
 EXTRA_LDFLAGS += -ldl
-@
-
-<<makefile.vars>>=
-C_POSTPROCESS += | (tee /tmp/cf.$$$$ | cproto -s -S - > /tmp/cfp.$$$$ ; \
-		    sed -e '/\#include "cproto.h"/'r/tmp/cfp.$$$$ < /tmp/cf.$$$$ ; \
-		    rm -f /tmp/cf.$$$$ /tmp/cfp.$$$$)
 @
 
 <<makefile.rules>>=
