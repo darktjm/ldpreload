@@ -22,6 +22,8 @@ $path = shift;
 $path =~ /.*\/(.*)/;
 $filename = $1;
 
+use DateTime::Format::Strptime;
+
 if (0 == length($filename)) {
 	$filename = $path;
 }
@@ -40,12 +42,15 @@ $rev =~ /^commit (.*)$/m;
 $ident = $1;
 $rev =~ /^    git-svn-id.*@([0-9]+)/m;
 $svnrev = $1 || $ident;
+$strp = DateTime::Format::Strptime->new(pattern => '%F %T %z');
+$ldate = $strp->parse_datetime($date)->strftime('(%c)');
+ 
 
 while (<STDIN>) {
-    s/\$Date[^\$]*\$/\$Date:   $date \$/;
+    s/\$Date[^\$]*\$/\$Date: $date $ldate \$/;
     s/\$Author[^\$]*\$/\$Author: $author \$/;
     s/\$Id[^\$]*\$/\$Id: $filename $svnrev $date $name \$/;
-    s/\$File[^\$]*\$/\$File:   $filename \$/;
+    s/\$File[^\$]*\$/\$File: $filename \$/;
     s/\$Source[^\$]*\$/\$Source: $path \$/;
 	s/\$Revision[^\$]*\$/\$Revision: $svnrev \$/;
 } continue {
